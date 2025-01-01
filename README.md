@@ -1,5 +1,5 @@
 
-# Full-Stack Food Delivery Web App
+# Full-Stack Food Delivery Web App using MERN
 
 A modern and responsive full-stack food delivery application built using **React JS**, **Node.js**, **Express**, **MongoDB**, and **Stripe** for secure payment integration. It features a user-friendly interface, dynamic cart management, and an admin panel for managing orders and products.
 
