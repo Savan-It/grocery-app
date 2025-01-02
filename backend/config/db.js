@@ -1,11 +1,17 @@
 import mongoose from "mongoose";
 
-export const  connectDB = async () =>{
+export const connectDB = async () => {
+  try {
+    const uri = process.env.MONGODB_URI;
 
-    await mongoose.connect('mongodb+srv://kabirmishra0505:MongoKabir55@cluster0.tuxye.mongodb.net/food-del').then(()=>console.log("DB Connected"));
-   
-}
+    if (!uri) {
+      throw new Error("Please define the MONGODB_URI environment variable");
+    }
 
-
-// add your mongoDB connection string above.
-// Do not use '@' symbol in your databse user's password else it will show an error.
+    await mongoose.connect(uri);
+    console.log("DB Connected");
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error.message);
+    process.exit(1); // Exit the application with an error code
+  }
+};
