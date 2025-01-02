@@ -134,6 +134,37 @@ A modern and responsive full-stack food delivery application built using **React
 
 ---
 
+## 📸 Screenshots
+
+### 1. Home Page
+![Home Page](assets/screenshots/homepage.png)
+
+### 2. Menu Page
+![Menu Page](assets/screenshots/menu-page.png)
+
+### 3. Top Dishes Section
+![Top Dishes Section](assets/screenshots/top-dishes.png)
+
+### 4. Cart Page
+![Cart Page](assets/screenshots/cart-page.png)
+
+### 5. Checkout Page
+![Checkout Page](assets/screenshots/checkout-page.png)
+
+### 6. Order Placed Confirmation
+![Order Placed Confirmation](assets/screenshots/order-placed.png)
+
+### 7. Admin Panel - Add Item
+![Admin Panel - Add Item](assets/screenshots/admin-add-item.png)
+
+### 8. Admin Panel - List Items
+![Admin Panel - List Items](assets/screenshots/admin-list-items.png)
+
+### 9. Admin Panel - Orders Management
+![Admin Panel - Orders Management](assets/screenshots/admin-orders.png)
+
+---
+
 ## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
