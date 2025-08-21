@@ -1,12 +1,12 @@
 import { createContext, useEffect, useState } from "react";
-import { food_list, menu_list } from "../assets/assets";
+    import { menu_list } from "../assets/assets";
 import axios from "axios";
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
 
-    const url = "https://mern-tomato-full-stack-food-delivery.onrender.com"
-    const [food_list, setFoodList] = useState([]);
+    const url = "http://localhost:5000"
+    const [product_list, setProductList] = useState([]);
     const [cartItems, setCartItems] = useState({});
     const [token, setToken] = useState("")
     const currency = "₹";
@@ -35,21 +35,18 @@ const StoreContextProvider = (props) => {
         let totalAmount = 0;
         for (const item in cartItems) {
             try {
-              if (cartItems[item] > 0) {
-                let itemInfo = food_list.find((product) => product._id === item);
-                totalAmount += itemInfo.price * cartItems[item];
-            }  
-            } catch (error) {
-                
-            }
-            
+                if (cartItems[item] > 0) {
+                    let itemInfo = product_list.find((product) => product._id === item);
+                    totalAmount += itemInfo.price * cartItems[item];
+                }
+            } catch (error) {}
         }
         return totalAmount;
     }
 
-    const fetchFoodList = async () => {
-        const response = await axios.get(url + "/api/food/list");
-        setFoodList(response.data.data)
+    const fetchProductList = async () => {
+        const response = await axios.get(url + "/api/product/list");
+        setProductList(response.data.data)
     }
 
     const loadCartData = async (token) => {
@@ -59,7 +56,7 @@ const StoreContextProvider = (props) => {
 
     useEffect(() => {
         async function loadData() {
-            await fetchFoodList();
+            await fetchProductList();
             if (localStorage.getItem("token")) {
                 setToken(localStorage.getItem("token"))
                 await loadCartData({ token: localStorage.getItem("token") })
@@ -70,7 +67,7 @@ const StoreContextProvider = (props) => {
 
     const contextValue = {
         url,
-        food_list,
+        product_list,
         menu_list,
         cartItems,
         addToCart,

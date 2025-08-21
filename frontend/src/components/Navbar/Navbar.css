@@ -13,13 +13,13 @@
     display: flex;
     list-style: none;
     gap: 20px;
-    color: #49557E;
+    color: #388E3C;
     font-size: 18px;
 }
 
 .navbar-menu .active {
     padding-bottom: 2px;
-    border-bottom: 2px solid #49557E;
+    border-bottom: 2px solid #388E3C;
 }
 
 .navbar-right {
@@ -36,7 +36,7 @@ position: relative;
     position: absolute;
     min-width: 10px;
     min-height: 10px;
-    background-color: #FF4C24;
+    background-color: #43A047;
     border-radius: 5px;
     top: -8px;
     right: -8px;

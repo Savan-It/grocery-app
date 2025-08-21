@@ -9,7 +9,7 @@ const List = () => {
   const [list, setList] = useState([]);
 
   const fetchList = async () => {
-    const response = await axios.get(`${url}/api/food/list`)
+    const response = await axios.get(`${url}/api/product/list`)
     if (response.data.success) {
       setList(response.data.data);
     }
@@ -18,9 +18,9 @@ const List = () => {
     }
   }
 
-  const removeFood = async (foodId) => {
-    const response = await axios.post(`${url}/api/food/remove`, {
-      id: foodId
+  const removeProduct = async (productId) => {
+    const response = await axios.post(`${url}/api/product/remove`, {
+      id: productId
     })
     await fetchList();
     if (response.data.success) {
@@ -37,13 +37,16 @@ const List = () => {
 
   return (
     <div className='list add flex-col'>
-      <p>All Foods List</p>
+      <p>All Products List</p>
       <div className='list-table'>
         <div className="list-table-format title">
           <b>Image</b>
           <b>Name</b>
           <b>Category</b>
           <b>Price</b>
+          <b>Stock</b>
+          <b>Expiry</b>
+          <b>Unit</b>
           <b>Action</b>
         </div>
         {list.map((item, index) => {
@@ -53,7 +56,10 @@ const List = () => {
               <p>{item.name}</p>
               <p>{item.category}</p>
               <p>{currency}{item.price}</p>
-              <p className='cursor' onClick={() => removeFood(item._id)}>x</p>
+              <p>{item.stock}</p>
+              <p>{item.expiryDate ? new Date(item.expiryDate).toLocaleDateString() : '-'}</p>
+              <p>{item.unit}</p>
+              <p className='cursor' onClick={() => removeProduct(item._id)}>x</p>
             </div>
           )
         })}
