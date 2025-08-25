@@ -1,5 +1,4 @@
 import { createContext, useEffect, useState } from "react";
-    import { menu_list } from "../assets/assets";
 import axios from "axios";
 export const StoreContext = createContext(null);
 
@@ -11,6 +10,22 @@ const StoreContextProvider = (props) => {
     const [token, setToken] = useState("")
     const currency = "₹";
     const deliveryCharge = 50;
+
+    // Update cart item quantity or remove item
+    const updateCart = async (itemId, quantity) => {
+        setCartItems(prev => {
+            const updated = { ...prev };
+            if (quantity > 0) {
+                updated[itemId] = quantity;
+            } else {
+                updated[itemId] = 0;
+            }
+            return updated;
+        });
+        if (token) {
+            await axios.post(url + "/api/cart/update", { itemId, quantity }, { headers: { token } });
+        }
+    };
 
     const addToCart = async (itemId) => {
         if (!cartItems[itemId]) {
@@ -68,7 +83,6 @@ const StoreContextProvider = (props) => {
     const contextValue = {
         url,
         product_list,
-        menu_list,
         cartItems,
         addToCart,
         removeFromCart,
@@ -77,6 +91,7 @@ const StoreContextProvider = (props) => {
         setToken,
         loadCartData,
         setCartItems,
+        updateCart,
         currency,
         deliveryCharge
     };

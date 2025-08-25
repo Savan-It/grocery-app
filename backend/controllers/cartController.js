@@ -1,4 +1,22 @@
 import userModel from "../models/userModel.js"
+// update cart details (set quantity, remove item, etc)
+const updateCart = async (req, res) => {
+   try {
+      let userData = await userModel.findById(req.body.userId);
+      let cartData = userData.cartData || {};
+      const { itemId, quantity } = req.body;
+      if (quantity > 0) {
+         cartData[itemId] = quantity;
+      } else {
+         delete cartData[itemId];
+      }
+      await userModel.findByIdAndUpdate(req.body.userId, { cartData });
+      res.json({ success: true, message: "Cart updated", cartData });
+   } catch (error) {
+      console.log(error);
+      res.json({ success: false, message: "Error updating cart" });
+   }
+}
 
 // add to user cart  
 const addToCart = async (req, res) => {
@@ -49,4 +67,4 @@ const getCart = async (req, res) => {
 }
 
 
-export { addToCart, removeFromCart, getCart }
+export { addToCart, removeFromCart, getCart, updateCart }

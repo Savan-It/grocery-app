@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import AdminOrderDetails from './OrderDetails';
 import './Orders.css'
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -7,6 +8,7 @@ import { assets, url, currency } from '../../assets/assets';
 const Order = () => {
 
   const [orders, setOrders] = useState([]);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   const fetchAllOrders = async () => {
     const response = await axios.get(`${url}/api/order/list`)
@@ -34,41 +36,53 @@ const Order = () => {
     fetchAllOrders();
   }, [])
 
+  const statusColors = {
+    'Product Processing': '#FFA726',
+    'Out for delivery': '#29B6F6',
+    'Delivered': '#43A047',
+  };
+
+  // handle delete from listing
+  const handleDeleteOrder = async (orderId) => {
+    if (window.confirm('Delete this order?')) {
+      await fetch(`${url}/api/order/delete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId })
+      });
+      fetchAllOrders();
+    }
+  };
+
+  // handle details back, refresh if deleted
+  const handleDetailsBack = (action) => {
+    setSelectedOrder(null);
+    if (action === 'deleted') fetchAllOrders();
+  };
+
   return (
     <div className='order add'>
       <h3>Order Page</h3>
-      <div className="order-list">
-        {orders.map((order, index) => (
-          <div key={index} className='order-item'>
-            <img src={assets.parcel_icon} alt="" />
-            <div>
-              <p className='order-item-food'>
-                {order.items.map((item, index) => {
-                  if (index === order.items.length - 1) {
-                    return item.name + " x " + item.quantity
-                  }
-                  else {
-                    return item.name + " x " + item.quantity + ", "
-                  }
-                })}
-              </p>
-              <p className='order-item-name'>{order.address.firstName + " " + order.address.lastName}</p>
-              <div className='order-item-address'>
-                <p>{order.address.street + ","}</p>
-                <p>{order.address.city + ", " + order.address.state + ", " + order.address.country + ", " + order.address.zipcode}</p>
+      {selectedOrder ? (
+        <AdminOrderDetails order={selectedOrder} onBack={handleDetailsBack} />
+      ) : (
+        <div className="order-list">
+          {orders.map((order, index) => (
+            <div key={index} className='order-item' style={{cursor:'pointer',borderColor:statusColors[order.status]||'#ccc',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'18px 24px',margin:'18px 0'}} onClick={() => setSelectedOrder(order)}>
+              <div>
+                <span style={{fontWeight:'bold',fontSize:'1.1rem'}}>Items: {order.items.length}</span>
               </div>
-              <p className='order-item-phone'>{order.address.phone}</p>
+              <div>
+                <span style={{fontWeight:'bold',fontSize:'1.1rem'}}>{order.address.firstName} {order.address.lastName}</span>
+              </div>
+              <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
+                <span style={{color:statusColors[order.status]||'#888',fontWeight:'bold'}}>{order.status}</span>
+                <button onClick={e => {e.stopPropagation();handleDeleteOrder(order._id)}} style={{background:'none',border:'none',color:'#d32f2f',fontSize:'1.2rem',cursor:'pointer'}} title='Delete Order'>🗑️</button>
+              </div>
             </div>
-            <p>Items : {order.items.length}</p>
-            <p>{currency}{order.amount}</p>
-            <select onChange={(e) => statusHandler(e, order._id)} value={order.status} name="" id="">
-              <option value="Product Processing">Product Processing</option>
-              <option value="Out for delivery">Out for delivery</option>
-              <option value="Delivered">Delivered</option>
-            </select>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

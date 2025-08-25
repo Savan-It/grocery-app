@@ -34,6 +34,25 @@ const addProduct = async (req, res) => {
     }
 };
 
+// Update product
+const updateProduct = async (req, res) => {
+    try {
+        const { id, name, category, price, stock, expiryDate, unit } = req.body;
+        await productModel.findByIdAndUpdate(id, {
+            name,
+            category,
+            price,
+            stock,
+            expiryDate,
+            unit
+        });
+        res.json({ success: true, message: "Product Updated" });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: "Error updating product" });
+    }
+};
+
 // Delete product
 const removeProduct = async (req, res) => {
     try {
@@ -47,4 +66,4 @@ const removeProduct = async (req, res) => {
     }
 };
 
-export { listProduct, addProduct, removeProduct };
+export { listProduct, addProduct, removeProduct, updateProduct };

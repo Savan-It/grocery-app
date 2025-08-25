@@ -62,11 +62,17 @@ const placeOrder = async (req, res) => {
 const placeOrderCod = async (req, res) => {
 
     try {
+        // Only keep required address fields for now
+        const address = {
+            street: req.body.address.street,
+            city: req.body.address.city,
+            phone: req.body.address.phone
+        };
         const newOrder = new orderModel({
             userId: req.body.userId,
             items: req.body.items,
             amount: req.body.amount,
-            address: req.body.address,
+            address,
             payment: true,
         })
         await newOrder.save();
@@ -81,9 +87,27 @@ const placeOrderCod = async (req, res) => {
 }
 
 // Listing Order for Admin panel
+import productModel from "../models/foodModel.js";
 const listOrders = async (req, res) => {
     try {
-        const orders = await orderModel.find({});
+        let orders = await orderModel.find({});
+        // Populate product details for each item
+        orders = await Promise.all(orders.map(async (order) => {
+            const itemsWithDetails = await Promise.all(order.items.map(async (item) => {
+                const product = await productModel.findById(item.productId);
+                return {
+                    productId: item.productId,
+                    quantity: item.quantity,
+                    name: product?.name || "",
+                    image: product?.image || "",
+                    price: product?.price || 0,
+                };
+            }));
+            return {
+                ...order.toObject(),
+                items: itemsWithDetails
+            };
+        }));
         res.json({ success: true, data: orders })
     } catch (error) {
         console.log(error);
@@ -130,4 +154,13 @@ const verifyOrder = async (req, res) => {
 
 }
 
-export { placeOrder, listOrders, userOrders, updateStatus, verifyOrder, placeOrderCod }
+const deleteOrder = async (req, res) => {
+    try {
+        await orderModel.findByIdAndDelete(req.body.orderId);
+        res.json({ success: true, message: "Order Deleted" })
+    } catch (error) {
+        res.json({ success: false, message: "Error deleting order" })
+    }
+}
+
+export { placeOrder, listOrders, userOrders, updateStatus, verifyOrder, placeOrderCod, deleteOrder }

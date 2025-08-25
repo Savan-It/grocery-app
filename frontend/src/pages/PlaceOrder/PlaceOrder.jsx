@@ -10,14 +10,14 @@ const PlaceOrder = () => {
 
     const [payment, setPayment] = useState("cod")
     const [data, setData] = useState({
-        firstName: "",
-        lastName: "",
-        email: "",
+        // firstName: "",
+        // lastName: "",
+        // email: "",
         street: "",
         city: "",
-        state: "",
-        zipcode: "",
-        country: "",
+        // state: "",
+        // zipcode: "",
+        // country: "",
         phone: ""
     })
 
@@ -86,16 +86,16 @@ const PlaceOrder = () => {
                     <input type="text" name='firstName' onChange={onChangeHandler} value={data.firstName} placeholder='First name' required />
                     <input type="text" name='lastName' onChange={onChangeHandler} value={data.lastName} placeholder='Last name' required />
                 </div>
-                <input type="email" name='email' onChange={onChangeHandler} value={data.email} placeholder='Email address' required />
-                <input type="text" name='street' onChange={onChangeHandler} value={data.street} placeholder='Street' required />
+                {/* <input type="email" name='email' onChange={onChangeHandler} value={data.email} placeholder='Email address' required /> */}
+                <input type="text" name='street' onChange={onChangeHandler} value={data.street} placeholder='Address' required />
                 <div className="multi-field">
                     <input type="text" name='city' onChange={onChangeHandler} value={data.city} placeholder='City' required />
-                    <input type="text" name='state' onChange={onChangeHandler} value={data.state} placeholder='State' required />
                 </div>
-                <div className="multi-field">
+                {/* <div className="multi-field">
+                    <input type="text" name='state' onChange={onChangeHandler} value={data.state} placeholder='State' required />
                     <input type="text" name='zipcode' onChange={onChangeHandler} value={data.zipcode} placeholder='Zip code' required />
                     <input type="text" name='country' onChange={onChangeHandler} value={data.country} placeholder='Country' required />
-                </div>
+                </div> */}
                 <input type="text" name='phone' onChange={onChangeHandler} value={data.phone} placeholder='Phone' required />
             </div>
             <div className="place-order-right">
@@ -111,16 +111,12 @@ const PlaceOrder = () => {
                 </div>
                 <div className="payment">
                     <h2>Payment Method</h2>
-                    <div onClick={() => setPayment("cod")} className="payment-option">
-                        <img src={payment === "cod" ? assets.checked : assets.un_checked} alt="" />
+                    <div className="payment-option active">
+                        <img src={assets.checked} alt="" />
                         <p>COD ( Cash on delivery )</p>
                     </div>
-                    <div onClick={() => setPayment("stripe")} className="payment-option">
-                        <img src={payment === "stripe" ? assets.checked : assets.un_checked} alt="" />
-                        <p>Stripe ( Credit / Debit )</p>
-                    </div>
                 </div>
-                <button className='place-order-submit' type='submit'>{payment==="cod"?"Place Order":"Proceed To Payment"}</button>
+                <button className='place-order-submit' type='submit'>Place Order</button>
             </div>
         </form>
     )

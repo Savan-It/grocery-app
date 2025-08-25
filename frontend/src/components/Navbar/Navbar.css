@@ -1,12 +1,19 @@
 .navbar {
-    padding: 20px 0px;
+    padding: 10px 8vw;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #fff;
+    box-shadow: 0 2px 8px #A3D97722;
 }
 
 .navbar .logo {
     width: 150px;
+    height: auto;
+    object-fit: contain;
 }
 
 .navbar-menu {
@@ -32,14 +39,17 @@
 position: relative;
 }
 
-.navbar-search-icon .dot{
+.cart-count-badge {
     position: absolute;
-    min-width: 10px;
-    min-height: 10px;
-    background-color: #43A047;
-    border-radius: 5px;
     top: -8px;
     right: -8px;
+    background: #43A047;
+    color: #fff;
+    border-radius: 50%;
+    padding: 2px 7px;
+    font-size: 13px;
+    font-weight: bold;
+    z-index: 2;
 }
 
 .navbar-right button {

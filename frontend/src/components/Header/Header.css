@@ -1,9 +1,35 @@
 .header{
     height: 34vw;
     margin: 30px auto;
-    background: url('/header_img.png') no-repeat;
-    background-size:contain;
-    position: relative;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    background-position: center !important;
+    position: relative !important;
+    transition: background-image 0.5s;
+    height: 232px;
+}
+.header-slider-controls {
+    position: absolute;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 2;
+}
+.header-slider-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #43A047;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: background 0.2s, opacity 0.2s;
+}
+.header-slider-dot.active {
+    background: #43A047;
+    opacity: 1;
 }
 .header-contents{
     position: absolute;
@@ -36,7 +62,7 @@
 }
 @media (max-width:1050px) {
     .header{
-        height: 38vw;
+        height: 55vw;
     }
     .header-contents{
         max-width: 45%;

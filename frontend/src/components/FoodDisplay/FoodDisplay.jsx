@@ -12,7 +12,7 @@ const FoodDisplay = ({category}) => {
       <h2>Top products at Shiv Parlour</h2>
       <div className='food-display-list'>
         {(product_list || []).map((item) => {
-          if (category === "All" || category === item.category) {
+          if (category === "All" || ["Dairy","Namkeen","icecream","other"].includes(item.category) && category === item.category) {
             return <FoodItem key={item._id} image={item.image} name={item.name} desc={item.description} price={item.price} id={item._id} />;
           }
           return null;

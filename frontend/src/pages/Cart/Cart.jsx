@@ -1,12 +1,24 @@
 import React, { useContext } from 'react'
 import './Cart.css'
 import { StoreContext } from '../../Context/StoreContext'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link  } from 'react-router-dom';
 
 const Cart = () => {
 
-  const {cartItems, product_list, removeFromCart,getTotalCartAmount,url,currency,deliveryCharge} = useContext(StoreContext);
+  const {cartItems, product_list, addToCart, removeFromCart, getTotalCartAmount, url, currency, deliveryCharge, setCartItems, loadCartData, token, updateCart} = useContext(StoreContext);
   const navigate = useNavigate();
+
+  const cartIsEmpty = Object.values(cartItems).every(qty => qty === 0);
+
+  if (cartIsEmpty) {
+    return (
+      <div className='cart-empty-message' style={{textAlign:'center',margin:'80px 0'}}>
+        <h2>Your cart is empty</h2>
+        <p className='my-2'>Start shopping to add products to your cart.</p>
+        <Link  to='/' style={{color:'#43A047',fontWeight:'bold',textDecoration:'underline'}}>Home Page</Link>
+      </div>
+    );
+  }
 
   return (
     <div className='cart'>
@@ -24,9 +36,22 @@ const Cart = () => {
                   <img src={url + "/images/" + item.image} alt="" />
                   <p>{item.name}</p>
                   <p>{currency}{item.price}</p>
-                  <div>{cartItems[item._id]}</div>
+                  <div className="cart-item-qty-control">
+                    <input
+                      type="number"
+                      min={1}
+                      value={cartItems[item._id]}
+                      onChange={async e => {
+                        const val = Math.max(1, Number(e.target.value));
+                        await updateCart(item._id, val);
+                      }}
+                      className="cart-qty-input"
+                    />
+                  </div>
                   <p>{currency}{item.price * cartItems[item._id]}</p>
-                  <p className='cart-items-remove-icon' onClick={() => removeFromCart(item._id)}>x</p>
+                  <p className='cart-items-remove-icon' onClick={async () => {
+                    await updateCart(item._id, 0);
+                  }}>x</p>
                 </div>
                 <hr />
               </div>
@@ -46,15 +71,6 @@ const Cart = () => {
             <div className="cart-total-details"><b>Total</b><b>{currency}{getTotalCartAmount()===0?0:getTotalCartAmount()+deliveryCharge}</b></div>
           </div>
           <button onClick={()=>navigate('/order')}>PROCEED TO CHECKOUT</button>
-        </div>
-        <div className="cart-promocode">
-          <div>
-            <p>If you have a promo code, Enter it here</p>
-            <div className='cart-promocode-input'>
-              <input type="text" placeholder='promo code'/>
-              <button>Submit</button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
